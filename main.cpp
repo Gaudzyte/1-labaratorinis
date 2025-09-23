@@ -66,3 +66,4 @@ int main()
              << fixed << setprecision(2) << setw(15) << past.gal << endl;
     }
 }
+
