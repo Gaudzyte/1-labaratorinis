@@ -3,6 +3,7 @@
 #include <string>
 #include <iomanip>
 #include <algorithm>
+#include <limits>
 
 using namespace std;
 using std::cout;
@@ -34,25 +35,49 @@ double median(vector<int> paz) {
 }
 
 Studentas Stud_iv(){
-    int n, laik_paz, suma = 0;
     Studentas Pirmas;
-    cout<<"Iveskite studento duomenis."<<endl;
-    cout<<"Vardas: "; cin>>Pirmas.var; 
-    cout<<"Pavarde: "; cin>>Pirmas.pav;
-    cout<<"Kiek pazymiu turi "<<Pirmas.var<<" "<<Pirmas.pav<<": "; cin>>n; 
-    for(int a=0; a<n; a++)
-        {
-        cout<<"Iveskite "<<a+1<<" pazymi: "; cin>>laik_paz;
-        Pirmas.paz.push_back(laik_paz);
-        suma += laik_paz; //sum+=Pirmas.paz[a];
+    cout << "Iveskite studento duomenis." << endl;
+    cout << "Vardas: "; 
+    cin >> Pirmas.var; 
+    cout << "Pavarde: "; 
+    cin >> Pirmas.pav;
+    cin.ignore(numeric_limits<streamsize>::max(), '\n'); // išvalom buferį
+
+    cout << "Iveskite pazymius (Norint baigti - spauskite du kartus ENTER):" << endl;
+    string eilute;
+    int suma = 0;
+    int tusti = 0;
+
+    while (true) {
+        getline(cin, eilute);
+
+        if (eilute.empty()) {
+            tusti++;
+            if (tusti == 1) break; // du ENTER paeiliui = pabaiga
+            continue;
+        } else {
+            tusti = 0; // buvo įvestas skaičius
         }
-    cout<<"Iveskite egzamino pazymi:"; cin>>Pirmas.egz;
+        int laik_paz = stoi(eilute); // darom prielaidą, kad visada skaičius
+        Pirmas.paz.push_back(laik_paz);
+        suma += laik_paz;
+    }
 
-    double vid = double(suma) / double(n);
-    double med = median(Pirmas.paz);
+    cout << "Iveskite egzamino pazymi: "; 
+    cin >> Pirmas.egz;
+    cin.ignore(numeric_limits<streamsize>::max(), '\n');
 
-    Pirmas.gal_vid = vid * 0.4 + 0.6 * Pirmas.egz;
-    Pirmas.gal_med = med * 0.4 + 0.6 * Pirmas.egz;
+    if (!Pirmas.paz.empty()) {
+        double vid = double(suma) / double(Pirmas.paz.size());
+        double med = median(Pirmas.paz);
+
+        Pirmas.gal_vid = vid * 0.4 + 0.6 * Pirmas.egz;
+        Pirmas.gal_med = med * 0.4 + 0.6 * Pirmas.egz;
+    } else {
+        Pirmas.gal_vid = 0.6 * Pirmas.egz;
+        Pirmas.gal_med = 0.6 * Pirmas.egz;
+    }
+
     return Pirmas;
 }
 
