@@ -41,7 +41,7 @@ Studentas Stud_iv(){
     cin >> Pirmas.var; 
     cout << "Pavarde: "; 
     cin >> Pirmas.pav;
-    cin.ignore(numeric_limits<streamsize>::max(), '\n'); // išvalom buferį
+    cin.ignore(numeric_limits<streamsize>::max(), '\n');
 
     cout << "Iveskite pazymius (Norint baigti - spauskite du kartus ENTER):" << endl;
     string eilute;
@@ -53,12 +53,12 @@ Studentas Stud_iv(){
 
         if (eilute.empty()) {
             tusti++;
-            if (tusti == 1) break; // du ENTER paeiliui = pabaiga
+            if (tusti == 1) break;
             continue;
         } else {
-            tusti = 0; // buvo įvestas skaičius
+            tusti = 0; 
         }
-        int laik_paz = stoi(eilute); // darom prielaidą, kad visada skaičius
+        int laik_paz = stoi(eilute); 
         Pirmas.paz.push_back(laik_paz);
         suma += laik_paz;
     }
