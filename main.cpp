@@ -1,4 +1,3 @@
-
 #include <iostream>
 #include <vector>
 #include <string>
@@ -127,6 +126,11 @@ int main()
     cout << "2 - Generuoti atsitiktinius pazymius ir egzamina" << endl;
     cout << "Pasirinkimas: ";
     cin >> pasirinkimas;
+
+    while (pasirinkimas != 1 && pasirinkimas != 2) {
+    cout << "Neteisingas pasirinkimas! Bandykite dar karta: ";
+    cin >> pasirinkimas;
+}
 
     for(int z=0; z<m; z++){
         if (pasirinkimas == 1) 
