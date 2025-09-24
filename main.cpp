@@ -120,20 +120,28 @@ int main()
     cout<<"Kiek studentu grupeje? ";
     int m;
     cin>>m;
-    Studentas past;
-    for(auto z=0; z<m; z++){
-        Grupe.push_back(Stud_iv());
+
+    int pasirinkimas;
+    cout << "Pasirinkite veiksma:" << endl;
+    cout << "1 - Ivesti pazymius ranka" << endl;
+    cout << "2 - Generuoti atsitiktinius pazymius ir egzamina" << endl;
+    cout << "Pasirinkimas: ";
+    cin >> pasirinkimas;
+
+    for(int z=0; z<m; z++){
+        if (pasirinkimas == 1) 
+            Grupe.push_back(Stud_iv());
+        else 
+            Grupe.push_back(Stud_rand());
     }
-    //past = Stud_iv();
 
     cout << endl;
     cout << left << setw(15) << "Pavarde" 
          << setw(15) << "Vardas" 
-          << setw(20) << "Galutinis (Vid.)"
+         << setw(20) << "Galutinis (Vid.)"
          << setw(20) << "Galutinis (Med.)" << endl;
     cout << string(70, '-') << endl;
-    
-    
+
     for(auto &past : Grupe) {
         cout << left << setw(15) << past.pav
              << setw(15) << past.var
