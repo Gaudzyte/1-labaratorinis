@@ -5,6 +5,7 @@
 #include <algorithm>
 #include <limits>
 #include <random> 
+#include <fstream>
 
 using namespace std;
 using std::cout;
@@ -113,43 +114,97 @@ Studentas Stud_rand() {
     return S;
 }
 
+Studentas Stud_file(ifstream &fin) {
+    Studentas S;
+    int pazymys;
+    S.paz.clear();
+
+    if (!(fin >> S.var >> S.pav)) return S; // vardas pavarde
+
+    for (int i = 0; i < 5; i++) {
+        if (fin >> pazymys)
+            S.paz.push_back(pazymys);
+        else
+            break;
+    }
+
+    fin >> S.egz; 
+
+    if (!S.paz.empty()) {
+        int suma = 0;
+        for (auto p : S.paz) suma += p;
+        double vid = double(suma) / S.paz.size();
+        double med = median(S.paz);
+        S.gal_vid = vid * 0.4 + 0.6 * S.egz;
+        S.gal_med = med * 0.4 + 0.6 * S.egz;
+    } else {
+        S.gal_vid = 0.6 * S.egz;
+        S.gal_med = 0.6 * S.egz;
+    }
+
+    return S;
+}
+
 int main()
 {
-    vector<Studentas>Grupe;
-    cout<<"Kiek studentu grupeje? ";
-    int m;
-    cin>>m;
+    vector<Studentas> Grupe;
 
     int pasirinkimas;
     cout << "Pasirinkite veiksma:" << endl;
     cout << "1 - Ivesti pazymius ranka" << endl;
     cout << "2 - Generuoti atsitiktinius pazymius ir egzamina" << endl;
+    cout << "3 - Nuskaityti studentus is failo kursiokai.txt" << endl;
     cout << "Pasirinkimas: ";
     cin >> pasirinkimas;
 
-    while (pasirinkimas != 1 && pasirinkimas != 2) {
-    cout << "Neteisingas pasirinkimas! Bandykite dar karta: ";
-    cin >> pasirinkimas;
-}
-
-    for(int z=0; z<m; z++){
-        if (pasirinkimas == 1) 
-            Grupe.push_back(Stud_iv());
-        else 
-            Grupe.push_back(Stud_rand());
+    while (pasirinkimas != 1 && pasirinkimas != 2 && pasirinkimas != 3) {
+        cout << "Neteisingas pasirinkimas! Bandykite dar karta: ";
+        cin >> pasirinkimas;
     }
 
+    if (pasirinkimas == 1) {
+        int m;
+        cout << "Kiek studentu grupeje? ";
+        cin >> m;
+        for (int z = 0; z < m; z++) {
+            Grupe.push_back(Stud_iv());
+        }
+    }
+    else if (pasirinkimas == 2) {
+        int m;
+        cout << "Kiek studentu grupeje? ";
+        cin >> m;
+        for (int z = 0; z < m; z++) {
+            Grupe.push_back(Stud_rand());
+        }
+    }
+    else if (pasirinkimas == 3) {
+        ifstream fin("kursiokai.txt");
+        if (!fin) {
+            cout << "Nepavyko atidaryti failo kursiokai.txt" << endl;
+            return 1;
+        }
+        string headerLine;
+        getline(fin, headerLine); // praleidžiam pirmą eilutę
+
+        while (fin.peek() != EOF) {
+            Grupe.push_back(Stud_file(fin));
+        }
+        cout << "Duomenys nuskaityti is failo." << endl;
+    }
+
+
     cout << endl;
-    cout << left << setw(15) << "Pavarde" 
-         << setw(15) << "Vardas" 
+    cout << left << setw(15) << "Pavarde"
+         << setw(15) << "Vardas"
          << setw(20) << "Galutinis (Vid.)"
          << setw(20) << "Galutinis (Med.)" << endl;
     cout << string(70, '-') << endl;
 
-    for(auto &past : Grupe) {
+    for (auto &past : Grupe) {
         cout << left << setw(15) << past.pav
              << setw(15) << past.var
-             << fixed << setprecision(2) 
+             << fixed << setprecision(2)
              << setw(20) << past.gal_vid
              << setw(20) << past.gal_med << endl;
     }
