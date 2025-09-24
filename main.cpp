@@ -1,9 +1,11 @@
+
 #include <iostream>
 #include <vector>
 #include <string>
 #include <iomanip>
 #include <algorithm>
 #include <limits>
+#include <random> 
 
 using namespace std;
 using std::cout;
@@ -53,7 +55,7 @@ Studentas Stud_iv(){
 
         if (eilute.empty()) {
             tusti++;
-            if (tusti == 1) break;
+            if (tusti == 1) break; 
             continue;
         } else {
             tusti = 0; 
@@ -79,6 +81,37 @@ Studentas Stud_iv(){
     }
 
     return Pirmas;
+}
+
+Studentas Stud_rand() {
+    Studentas S;
+    cout << "Iveskite studento duomenis." << endl;
+    cout << "Vardas: "; cin >> S.var;
+    cout << "Pavarde: "; cin >> S.pav;
+
+    random_device rd;
+    mt19937 gen(rd());
+    uniform_int_distribution<> paz_dist(1, 10);   
+    uniform_int_distribution<> egz_dist(1, 10);   
+    uniform_int_distribution<> kiek_dist(1, 7);  
+
+    int suma = 0;
+    int kiek = kiek_dist(gen);
+
+    for (int i = 0; i < kiek; i++) {
+        int paz = paz_dist(gen);
+        S.paz.push_back(paz);
+        suma += paz;
+    }
+
+    S.egz = egz_dist(gen);
+
+    double vid = double(suma) / double(S.paz.size());
+    double med = median(S.paz);
+    S.gal_vid = vid * 0.4 + 0.6 * S.egz;
+    S.gal_med = med * 0.4 + 0.6 * S.egz;
+
+    return S;
 }
 
 int main()
