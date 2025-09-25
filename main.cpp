@@ -116,21 +116,20 @@ Studentas Stud_rand() {
 
 Studentas Stud_file(ifstream &fin) {
     Studentas S;
-    int pazymys;
     S.paz.clear();
+    if (!(fin >> S.var >> S.pav)) return S;
 
-    if (!(fin >> S.var >> S.pav)) return S; // vardas pavarde
-
-    for (int i = 0; i < 5; i++) {
-        if (fin >> pazymys)
-            S.paz.push_back(pazymys);
-        else
-            break;
+    vector<int> laikini;
+    int x;
+    while (fin.peek() != '\n' && fin >> x) {
+        laikini.push_back(x);
     }
 
-    fin >> S.egz; 
+    if (!laikini.empty()) {
+        S.egz = laikini.back();
+        laikini.pop_back(); 
+        S.paz = laikini;
 
-    if (!S.paz.empty()) {
         int suma = 0;
         for (auto p : S.paz) suma += p;
         double vid = double(suma) / S.paz.size();
@@ -138,6 +137,7 @@ Studentas Stud_file(ifstream &fin) {
         S.gal_vid = vid * 0.4 + 0.6 * S.egz;
         S.gal_med = med * 0.4 + 0.6 * S.egz;
     } else {
+        S.egz = 0;
         S.gal_vid = 0.6 * S.egz;
         S.gal_med = 0.6 * S.egz;
     }
@@ -153,7 +153,7 @@ int main()
     cout << "Pasirinkite veiksma:" << endl;
     cout << "1 - Ivesti pazymius ranka" << endl;
     cout << "2 - Generuoti atsitiktinius pazymius ir egzamina" << endl;
-    cout << "3 - Nuskaityti studentus is failo kursiokai.txt" << endl;
+    cout << "3 - Nuskaityti studentus is failo" << endl;
     cout << "Pasirinkimas: ";
     cin >> pasirinkimas;
 
@@ -179,13 +179,13 @@ int main()
         }
     }
     else if (pasirinkimas == 3) {
-        ifstream fin("kursiokai.txt");
+        ifstream fin("studentai10000.txt");
         if (!fin) {
-            cout << "Nepavyko atidaryti failo kursiokai.txt" << endl;
+            cout << "Nepavyko atidaryti failo studentai10000.txt" << endl;
             return 1;
         }
         string headerLine;
-        getline(fin, headerLine); // praleidžiam pirmą eilutę
+        getline(fin, headerLine); 
 
         while (fin.peek() != EOF) {
             Grupe.push_back(Stud_file(fin));
