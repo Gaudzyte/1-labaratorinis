@@ -178,23 +178,26 @@ int main()
             Grupe.push_back(Stud_rand());
         }
     }
-    else if (pasirinkimas == 3) {
-        ifstream fin("studentai1000000.txt");
-        if (!fin) {
-            cout << "Nepavyko atidaryti failo studentai1000000.txt" << endl;
-            return 1;
-        }
+else if (pasirinkimas == 3) {
+    string failoPav;
+    cout << "Iveskite failo pavadinima: ";
+    cin >> failoPav;
 
-        string headerLine;
-        getline(fin, headerLine); 
-
-        while (fin.peek() != EOF) {
-            Grupe.push_back(Stud_file(fin));
-        }
-
-        cout << "Duomenys nuskaityti is failo studentai1000000.txt." << endl;
+    ifstream fin(failoPav);
+    if (!fin) {
+        cout << "Nepavyko atidaryti failo " << failoPav << endl;
+        return 1;
     }
 
+    string headerLine;
+    getline(fin, headerLine); 
+
+    while (fin.peek() != EOF) {
+        Grupe.push_back(Stud_file(fin));
+    }
+
+    cout << "Duomenys nuskaityti iš failo " << failoPav << "." << endl;
+}
     cout << endl;
     cout << left << setw(15) << "Pavarde"
          << setw(15) << "Vardas"
