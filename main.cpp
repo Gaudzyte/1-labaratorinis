@@ -226,9 +226,16 @@ int main()
         }
 
         cout << "Duomenys nuskaityti iš failo " << failoPav << "." << endl;
+        if (!Grupe.empty() && Grupe[0].var.rfind("Vardas", 0) == 0) {
+            sort(Grupe.begin(), Grupe.end(), [](const Studentas &a, const Studentas &b) {
+                return stoi(a.var.substr(6)) < stoi(b.var.substr(6));
+            });
+        } else {
+            sort(Grupe.begin(), Grupe.end(), [](const Studentas &a, const Studentas &b) {
+                return a.var < b.var;
+            });
+        }
     }
-    sort(Grupe.begin(), Grupe.end(), [](const Studentas &a, const Studentas &b)
-         { return a.var < b.var; });
     cout << endl;
     cout << left << setw(20) << "Pavarde"
          << setw(15) << "Vardas"
