@@ -179,20 +179,21 @@ int main()
         }
     }
     else if (pasirinkimas == 3) {
-        ifstream fin("studentai10000.txt");
+        ifstream fin("studentai100000.txt");
         if (!fin) {
-            cout << "Nepavyko atidaryti failo studentai10000.txt" << endl;
+            cout << "Nepavyko atidaryti failo studentai100000.txt" << endl;
             return 1;
         }
+
         string headerLine;
         getline(fin, headerLine); 
 
         while (fin.peek() != EOF) {
             Grupe.push_back(Stud_file(fin));
         }
-        cout << "Duomenys nuskaityti is failo." << endl;
-    }
 
+        cout << "Duomenys nuskaityti is failo studentai100000.txt." << endl;
+    }
 
     cout << endl;
     cout << left << setw(15) << "Pavarde"
