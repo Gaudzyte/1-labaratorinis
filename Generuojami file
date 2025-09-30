@@ -1,0 +1,43 @@
+#include <iostream>
+#include <fstream>
+#include <string>
+#include <cstdlib>   
+#include <ctime>     
+
+using namespace std;
+
+void generuotiFaila(string pavadinimas, int kiek) {
+    ofstream fr(pavadinimas);
+    if (!fr) {
+        cout << "Nepavyko sukurti failo: " << pavadinimas << endl;
+        return;
+    }
+
+    fr << "Vardas Pavarde ND1 ND2 ND3 ND4 Egz" << endl;
+
+    for (int i = 1; i <= kiek; i++) {
+        fr << "Vardas" << i << " "
+           << "Pavarde" << i << " "
+           << (rand() % 10 + 1) << " "
+           << (rand() % 10 + 1) << " "
+           << (rand() % 10 + 1) << " "
+           << (rand() % 10 + 1) << " "
+           << (rand() % 10 + 1) << endl;
+
+    }
+
+    fr.close();
+    cout << "Failas " << pavadinimas << " sukurtas (" << kiek << " irasu)." << endl;
+}
+
+int main() {
+    srand(time(NULL)); // kad rand() duotų vis kitokius skaičius
+
+    generuotiFaila("studentai1000.txt", 1000);
+    generuotiFaila("studentai10000.txt", 10000);
+    generuotiFaila("studentai100000.txt", 100000);
+    generuotiFaila("studentai1000000.txt", 1000000);
+    generuotiFaila("studentai10000000.txt", 10000000);
+
+    return 0;
+}
