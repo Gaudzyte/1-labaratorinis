@@ -236,19 +236,24 @@ int main()
             });
         }
     }
-    cout << endl;
-    cout << left << setw(20) << "Pavarde"
+    
+    std::ofstream out("rezultatai.txt");
+    cout << "Spausdinam" << endl;
+    out << endl;
+    out << left << setw(20) << "Pavarde"
          << setw(15) << "Vardas"
          << setw(20) << "Galutinis (Vid.)"
          << setw(20) << "Galutinis (Med.)" << endl;
-    cout << string(80, '-') << endl;
+    out << string(80, '-') << endl;
 
     for (auto &past : Grupe)
     {
-        cout << left << setw(20) << past.pav
+        out << left << setw(20) << past.pav
              << setw(15) << past.var
              << fixed << setprecision(2)
              << setw(20) << past.gal_vid
              << setw(20) << past.gal_med << endl;
     }
+    out.close();
+    cout << "Spausdinti baigem";
 }
