@@ -225,35 +225,57 @@ int main()
             Grupe.push_back(Stud_file(fin));
         }
 
-        cout << "Duomenys nuskaityti iš failo " << failoPav << "." << endl;
-        if (!Grupe.empty() && Grupe[0].var.rfind("Vardas", 0) == 0) {
-            sort(Grupe.begin(), Grupe.end(), [](const Studentas &a, const Studentas &b) {
-                return stoi(a.var.substr(6)) < stoi(b.var.substr(6));
-            });
-        } else {
-            sort(Grupe.begin(), Grupe.end(), [](const Studentas &a, const Studentas &b) {
-                return a.var < b.var;
-            });
-        }
+        cout << "Duomenys nuskaityti is failo " << failoPav << "." << endl;
+
+        sort(Grupe.begin(), Grupe.end(), [](const Studentas &a, const Studentas &b) {
+            return a.var < b.var;
+        });
     }
-    
-    std::ofstream out("rezultatai.txt");
-    cout << "Spausdinam" << endl;
-    out << endl;
-    out << left << setw(20) << "Pavarde"
+
+    vector<Studentas> vargsiukai;
+    vector<Studentas> kietiakiai;
+
+    for (auto &s : Grupe)
+    {
+        if (s.gal_vid < 5.0)
+            vargsiukai.push_back(s);
+        else
+            kietiakiai.push_back(s);
+    }
+
+    ofstream out1("vargsiukai.txt");
+    out1 << left << setw(20) << "Pavarde"
          << setw(15) << "Vardas"
          << setw(20) << "Galutinis (Vid.)"
          << setw(20) << "Galutinis (Med.)" << endl;
-    out << string(80, '-') << endl;
+    out1 << string(80, '-') << endl;
 
-    for (auto &past : Grupe)
+    for (auto &s : vargsiukai)
     {
-        out << left << setw(20) << past.pav
-             << setw(15) << past.var
+        out1 << left << setw(20) << s.pav
+             << setw(15) << s.var
              << fixed << setprecision(2)
-             << setw(20) << past.gal_vid
-             << setw(20) << past.gal_med << endl;
+             << setw(20) << s.gal_vid
+             << setw(20) << s.gal_med << endl;
     }
-    out.close();
-    cout << "Spausdinti baigem";
+    out1.close();
+
+    ofstream out2("kietiakiai.txt");
+    out2 << left << setw(20) << "Pavarde"
+         << setw(15) << "Vardas"
+         << setw(20) << "Galutinis (Vid.)"
+         << setw(20) << "Galutinis (Med.)" << endl;
+    out2 << string(80, '-') << endl;
+
+    for (auto &s : kietiakiai)
+    {
+        out2 << left << setw(20) << s.pav
+             << setw(15) << s.var
+             << fixed << setprecision(2)
+             << setw(20) << s.gal_vid
+             << setw(20) << s.gal_med << endl;
+    }
+    out2.close();
+
+    cout << "Sugeneruoti du failai: vargsiukai.txt ir kietiakiai.txt" << endl;
 }
