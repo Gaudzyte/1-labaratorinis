@@ -25,6 +25,7 @@ using namespace std::chrono;
 using std::chrono::high_resolution_clock;
 using std::chrono::milliseconds;
 using std::chrono::duration_cast;
+using std::chrono::duration;
 
 int extractNumber(const string& pav) {
     string digits;
@@ -37,13 +38,11 @@ int extractNumber(const string& pav) {
 
 void rusiuoti(vector<Studentas>& grupe, int pasirinkimas) {
     if (pasirinkimas == 1) {
-        // pagal vardą
         sort(grupe.begin(), grupe.end(), [](const Studentas& a, const Studentas& b) {
             return a.var < b.var;
         });
     } 
     else if (pasirinkimas == 2) {
-        // pagal pavardės numerį
         sort(grupe.begin(), grupe.end(), [](const Studentas& a, const Studentas& b) {
             int na = extractNumber(a.pav);
             int nb = extractNumber(b.pav);
@@ -52,7 +51,6 @@ void rusiuoti(vector<Studentas>& grupe, int pasirinkimas) {
         });
     } 
     else if (pasirinkimas == 3) {
-        // pagal galutinį pažymį (vidurkį)
         sort(grupe.begin(), grupe.end(), [](const Studentas& a, const Studentas& b) {
             return a.gal_vid < b.gal_vid;
         });
@@ -62,6 +60,10 @@ void rusiuoti(vector<Studentas>& grupe, int pasirinkimas) {
 int main()
 {
     vector <Studentas> Grupe;
+
+    double readSec = 0.0; 
+    bool isFromFile = false;   
+    size_t nIrasu = 0; 
 
     int pasirinkimas;
     cout << "Pasirinkite veiksma:" << endl;
@@ -101,8 +103,8 @@ int main()
         }
 
         auto end = high_resolution_clock::now();
-        auto duration = duration_cast<milliseconds>(end - start);
-        cout << "Failu kurimas uztruko: " << duration.count() << " ms" << endl;
+        readSec = duration_cast<duration<double>>(end - start).count();
+        nIrasu = Grupe.size();
     }
     else if (pasirinkimas == 3)
     {
@@ -122,21 +124,38 @@ int main()
 
         auto start = high_resolution_clock::now();
 
-        while (fin.peek() != EOF)
+        while (true)
         {
-            Grupe.push_back(Stud_file(fin));
+            Studentas s = Stud_file(fin);
+            if (!fin) break;
+            Grupe.push_back(s);
         }
 
-        auto end = high_resolution_clock::now();
-        auto duration = duration_cast<milliseconds>(end - start);
-        cout << "Failu nuskaitymas uztruko: " << duration.count() << " ms" << endl;
 
-        cout << "Duomenys nuskaityti is failo " << failoPav << "." << endl;
+        auto end = high_resolution_clock::now();
+        readSec = duration_cast<duration<double>>(end - start).count();
+        isFromFile = true;
+        nIrasu = Grupe.size();
+
+        fin.close();
     }
 
+    int rusiavimas;
+    cout << "Pagal ka norite rusiuoti?" << endl;
+    cout << "1 - Pagal varda" << endl;
+    cout << "2 - Pagal pavarde" << endl;
+    cout << "3 - Pagal galutini pazymi (vid.)" << endl;
+    cout << "Pasirinkimas: ";
+    cin >> rusiavimas;
+
+    auto startSort = high_resolution_clock::now();
+    rusiuoti(Grupe, rusiavimas);
+    auto endSort = high_resolution_clock::now();
+    double sortSec = duration_cast<duration<double>>(endSort - startSort).count();
+
+    auto startSplit = high_resolution_clock::now();
     vector<Studentas> vargsiukai;
     vector<Studentas> kietiakiai;
-
     for (auto &s : Grupe)
     {
         if (s.gal_vid < 5.0)
@@ -144,17 +163,24 @@ int main()
         else
             kietiakiai.push_back(s);
     }
+    auto endSplit = high_resolution_clock::now();
+    double splitSec = duration_cast<duration<double>>(endSplit - startSplit).count();
 
-    int rusiavimas;
-    cout << "Pagal ka norite rusiuoti?" << endl;
-    cout << "1 - Pagal varda" << endl;
-    cout << "2 - Pagal pavarde (su numeriais)" << endl;
-    cout << "3 - Pagal galutini pazymi (vid.)" << endl;
-    cout << "Pasirinkimas: ";
-    cin >> rusiavimas;
+    if (isFromFile)
+    {
+        cout << "Vector" << endl;
+        cout << "Failas uzdarytas" << endl;
+        cout << "Failo is " << nIrasu
+             << " irasu nuskaitymo laikas: " << readSec << endl;
+    }
 
-    rusiuoti(vargsiukai, rusiavimas);
-    rusiuoti(kietiakiai, rusiavimas);
+    cout << Grupe.size()
+         << " irasu rusiavimas didejimo tvarka laikas, su sort funkcija: "
+         << sortSec << endl;
+
+    cout << Grupe.size()
+         << " irasu dalijimo i dvi grupes laikas: "
+         << splitSec << endl;
 
     issaugotiRezultatus(vargsiukai, kietiakiai);
 
