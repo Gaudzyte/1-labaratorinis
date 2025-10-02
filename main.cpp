@@ -10,6 +10,7 @@
 #include <random>
 #include <fstream>
 #include <cctype>
+#include <chrono>
 
 using namespace std;
 using std::cin;
@@ -20,6 +21,10 @@ using std::right;
 using std::setw;
 using std::string;
 using std::vector;
+using namespace std::chrono;
+using std::chrono::high_resolution_clock;
+using std::chrono::milliseconds;
+using std::chrono::duration_cast;
 
 int extractNumber(const string& pav) {
     string digits;
@@ -87,10 +92,17 @@ int main()
         int m;
         cout << "Kiek studentu grupeje? ";
         cin >> m;
+
+        auto start = high_resolution_clock::now();
+
         for (int z = 0; z < m; z++)
         {
             Grupe.push_back(Stud_rand());
         }
+
+        auto end = high_resolution_clock::now();
+        auto duration = duration_cast<milliseconds>(end - start);
+        cout << "Failu kurimas uztruko: " << duration.count() << " ms" << endl;
     }
     else if (pasirinkimas == 3)
     {
@@ -108,16 +120,18 @@ int main()
         string headerLine;
         getline(fin, headerLine);
 
+        auto start = high_resolution_clock::now();
+
         while (fin.peek() != EOF)
         {
             Grupe.push_back(Stud_file(fin));
         }
 
-        cout << "Duomenys nuskaityti is failo " << failoPav << "." << endl;
+        auto end = high_resolution_clock::now();
+        auto duration = duration_cast<milliseconds>(end - start);
+        cout << "Failu nuskaitymas uztruko: " << duration.count() << " ms" << endl;
 
-        sort(Grupe.begin(), Grupe.end(), [](const Studentas &a, const Studentas &b) {
-            return a.var < b.var;
-        });
+        cout << "Duomenys nuskaityti is failo " << failoPav << "." << endl;
     }
 
     vector<Studentas> vargsiukai;
@@ -142,7 +156,6 @@ int main()
     rusiuoti(vargsiukai, rusiavimas);
     rusiuoti(kietiakiai, rusiavimas);
 
-    // Rezultatų išsaugojimas
     issaugotiRezultatus(vargsiukai, kietiakiai);
 
     cout << "Sugeneruoti du failai: vargsiukai.txt ir kietiakiai.txt" << endl;
