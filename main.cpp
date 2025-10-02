@@ -9,6 +9,7 @@
 #include <limits>
 #include <random>
 #include <fstream>
+#include <cctype>
 
 using namespace std;
 using std::cin;
@@ -19,6 +20,39 @@ using std::right;
 using std::setw;
 using std::string;
 using std::vector;
+
+int extractNumber(const string& pav) {
+    string digits;
+    for (char c : pav) {
+        if (isdigit(c)) digits += c;
+    }
+    if (digits.empty()) return 0;
+    return stoi(digits);
+}
+
+void rusiuoti(vector<Studentas>& grupe, int pasirinkimas) {
+    if (pasirinkimas == 1) {
+        // pagal vardą
+        sort(grupe.begin(), grupe.end(), [](const Studentas& a, const Studentas& b) {
+            return a.var < b.var;
+        });
+    } 
+    else if (pasirinkimas == 2) {
+        // pagal pavardės numerį
+        sort(grupe.begin(), grupe.end(), [](const Studentas& a, const Studentas& b) {
+            int na = extractNumber(a.pav);
+            int nb = extractNumber(b.pav);
+            if (na == nb) return a.pav < b.pav;
+            return na < nb;
+        });
+    } 
+    else if (pasirinkimas == 3) {
+        // pagal galutinį pažymį (vidurkį)
+        sort(grupe.begin(), grupe.end(), [](const Studentas& a, const Studentas& b) {
+            return a.gal_vid < b.gal_vid;
+        });
+    }
+}
 
 int main()
 {
@@ -97,6 +131,20 @@ int main()
             kietiakiai.push_back(s);
     }
 
+    sort(vargsiukai.begin(), vargsiukai.end(), [](const Studentas& a, const Studentas& b) {
+        int na = extractNumber(a.pav);
+        int nb = extractNumber(b.pav);
+        if (na == nb) return a.pav < b.pav; 
+        return na < nb;
+    });
+
+    sort(kietiakiai.begin(), kietiakiai.end(), [](const Studentas& a, const Studentas& b) {
+        int na = extractNumber(a.pav);
+        int nb = extractNumber(b.pav);
+        if (na == nb) return a.pav < b.pav;
+        return na < nb;
+    });
+
     ofstream out1("vargsiukai.txt");
     out1 << left << setw(20) << "Pavarde"
          << setw(15) << "Vardas"
@@ -133,4 +181,3 @@ int main()
 
     cout << "Sugeneruoti du failai: vargsiukai.txt ir kietiakiai.txt" << endl;
 }
-
