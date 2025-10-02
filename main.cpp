@@ -131,53 +131,19 @@ int main()
             kietiakiai.push_back(s);
     }
 
-    sort(vargsiukai.begin(), vargsiukai.end(), [](const Studentas& a, const Studentas& b) {
-        int na = extractNumber(a.pav);
-        int nb = extractNumber(b.pav);
-        if (na == nb) return a.pav < b.pav; 
-        return na < nb;
-    });
+    int rusiavimas;
+    cout << "Pagal ka norite rusiuoti?" << endl;
+    cout << "1 - Pagal varda" << endl;
+    cout << "2 - Pagal pavarde (su numeriais)" << endl;
+    cout << "3 - Pagal galutini pazymi (vid.)" << endl;
+    cout << "Pasirinkimas: ";
+    cin >> rusiavimas;
 
-    sort(kietiakiai.begin(), kietiakiai.end(), [](const Studentas& a, const Studentas& b) {
-        int na = extractNumber(a.pav);
-        int nb = extractNumber(b.pav);
-        if (na == nb) return a.pav < b.pav;
-        return na < nb;
-    });
+    rusiuoti(vargsiukai, rusiavimas);
+    rusiuoti(kietiakiai, rusiavimas);
 
-    ofstream out1("vargsiukai.txt");
-    out1 << left << setw(20) << "Pavarde"
-         << setw(15) << "Vardas"
-         << setw(20) << "Galutinis (Vid.)"
-         << setw(20) << "Galutinis (Med.)" << endl;
-    out1 << string(80, '-') << endl;
-
-    for (auto &s : vargsiukai)
-    {
-        out1 << left << setw(20) << s.pav
-             << setw(15) << s.var
-             << fixed << setprecision(2)
-             << setw(20) << s.gal_vid
-             << setw(20) << s.gal_med << endl;
-    }
-    out1.close();
-
-    ofstream out2("kietiakiai.txt");
-    out2 << left << setw(20) << "Pavarde"
-         << setw(15) << "Vardas"
-         << setw(20) << "Galutinis (Vid.)"
-         << setw(20) << "Galutinis (Med.)" << endl;
-    out2 << string(80, '-') << endl;
-
-    for (auto &s : kietiakiai)
-    {
-        out2 << left << setw(20) << s.pav
-             << setw(15) << s.var
-             << fixed << setprecision(2)
-             << setw(20) << s.gal_vid
-             << setw(20) << s.gal_med << endl;
-    }
-    out2.close();
+    // Rezultatų išsaugojimas
+    issaugotiRezultatus(vargsiukai, kietiakiai);
 
     cout << "Sugeneruoti du failai: vargsiukai.txt ir kietiakiai.txt" << endl;
 }
