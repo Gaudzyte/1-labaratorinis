@@ -4,9 +4,8 @@
 
 int main()
 {
-    auto programStart = high_resolution_clock::now();
-
-    vector <Studentas> Grupe;
+    using namespace std::chrono; 
+    vector<Studentas> Grupe;
 
     double readSec = 0.0, sortSec = 0.0, splitSec = 0.0, vargsiukaiSec = 0.0, kietiakiaiSec = 0.0;
     size_t nIrasu = 0;
@@ -41,14 +40,14 @@ int main()
         cout << "Kiek studentu grupeje? ";
         cin >> m;
 
-        auto start = high_resolution_clock::now();
+        auto start = steady_clock::now(); 
 
         for (int z = 0; z < m; z++)
         {
             Grupe.push_back(Stud_rand());
         }
 
-        auto end = high_resolution_clock::now();
+        auto end = steady_clock::now();     // now matches start
         readSec = duration_cast<duration<double>>(end - start).count();
         nIrasu = Grupe.size();
     }
@@ -68,7 +67,7 @@ int main()
         string headerLine;
         getline(fin, headerLine);
 
-        auto start = high_resolution_clock::now();
+        auto start = steady_clock::now();
 
         while (true)
         {
@@ -78,9 +77,8 @@ int main()
         }
 
 
-        auto end = high_resolution_clock::now();
+        auto end = steady_clock::now();
         readSec = duration_cast<duration<double>>(end - start).count();
-        nIrasu = Grupe.size();
         nIrasu = Grupe.size();
 
         fin.close();
@@ -95,12 +93,14 @@ int main()
     cout << "Pasirinkimas: ";
     cin >> rusiavimas;
 
-    auto startSort = high_resolution_clock::now();
+    auto programStart = steady_clock::now();
+
+    auto startSort = steady_clock::now();
     rusiuoti(Grupe, rusiavimas);
-    auto endSort = high_resolution_clock::now();
+    auto endSort = steady_clock::now();
     sortSec = duration_cast<duration<double>>(endSort - startSort).count();
 
-    auto startSplit = high_resolution_clock::now();
+    auto startSplit = steady_clock::now();
     vector<Studentas> vargsiukai, kietiakiai;
     for (auto &s : Grupe) {
         if (s.gal_vid < 5.0) vargsiukai.push_back(s);
@@ -108,22 +108,23 @@ int main()
     }
     //cout << "varg: " << vargsiukai.size() << " ; kiet: " << kietiakiai.size();
     Grupe.clear();
-    auto endSplit = high_resolution_clock::now();
+    auto endSplit = steady_clock::now();
     splitSec = duration_cast<duration<double>>(endSplit - startSplit).count();
 
-    auto startVargs = high_resolution_clock::now();
-    issaugotiRezultatus(vargsiukai, {}); 
-    auto endVargs = high_resolution_clock::now();
+    auto startVargs = steady_clock::now();
+    issaugotiRezultatus(vargsiukai, {});
+    auto endVargs = steady_clock::now();
     vargsiukaiSec = duration_cast<duration<double>>(endVargs - startVargs).count();
 
-    auto startKiet = high_resolution_clock::now();
-    issaugotiRezultatus({}, kietiakiai); 
-    auto endKiet = high_resolution_clock::now();
+    auto startKiet = steady_clock::now();
+    issaugotiRezultatus({}, kietiakiai);
+    auto endKiet = steady_clock::now();
     kietiakiaiSec = duration_cast<duration<double>>(endKiet - startKiet).count();
 
-    auto programEnd = high_resolution_clock::now();
+    auto programEnd = steady_clock::now();
     double totalSec = duration_cast<duration<double>>(programEnd - programStart).count();
 
+    cout << fixed << setprecision(6);
     cout << "Failas uzdarytas\nFailo is " << nIrasu 
          << " irasu nuskaitymo laikas: " << readSec << "\n"
          << nIrasu << " irasu rusiavimas didejimo tvarka laikas, su sort funkcija: " << sortSec << "\n"
