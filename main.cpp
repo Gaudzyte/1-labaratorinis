@@ -1,11 +1,13 @@
 #include "studentas.h"
 #include "utils.h"
 #include "libraries.h"
+#include <list>
 
 int main()
 {
     using namespace std::chrono; 
-    vector<Studentas> Grupe;
+   // vector<Studentas> Grupe;
+    std::list<Studentas> Grupe;
 
     double readSec = 0.0, sortSec = 0.0, splitSec = 0.0, vargsiukaiSec = 0.0, kietiakiaiSec = 0.0;
     size_t nIrasu = 0;
@@ -47,7 +49,7 @@ int main()
             Grupe.push_back(Stud_rand());
         }
 
-        auto end = steady_clock::now();     // now matches start
+        auto end = steady_clock::now(); 
         readSec = duration_cast<duration<double>>(end - start).count();
         nIrasu = Grupe.size();
     }
@@ -96,28 +98,49 @@ int main()
     auto programStart = steady_clock::now();
 
     auto startSort = steady_clock::now();
-    rusiuoti(Grupe, rusiavimas);
+    //rusiuoti(Grupe, rusiavimas);
+    //auto endSort = steady_clock::now();
+    //sortSec = duration_cast<duration<double>>(endSort - startSort).count();
+    Grupe.sort([rusiavimas](const Studentas &a, const Studentas &b) {
+        if (rusiavimas == 1) return a.var < b.var;
+        if (rusiavimas == 2) return a.pav < b.pav;
+        if (rusiavimas == 3) return a.gal_vid < b.gal_vid;
+        return false;
+    });
     auto endSort = steady_clock::now();
     sortSec = duration_cast<duration<double>>(endSort - startSort).count();
+   
 
     auto startSplit = steady_clock::now();
-    vector<Studentas> vargsiukai, kietiakiai;
-    for (auto &s : Grupe) {
-        if (s.gal_vid < 5.0) vargsiukai.push_back(s);
-        else kietiakiai.push_back(s);
+    std::list<Studentas> vargsiukai, kietiakiai;
+
+    for (auto &s : Grupe)
+    {
+        if (s.gal_vid < 5.0)
+            vargsiukai.push_back(s);
+        else
+            kietiakiai.push_back(s);
     }
-    //cout << "varg: " << vargsiukai.size() << " ; kiet: " << kietiakiai.size();
+
+    //vector<Studentas> vargsiukai, kietiakiai;
+    //for (auto &s : Grupe) {
+    //    if (s.gal_vid < 5.0) vargsiukai.push_back(s);
+    //    else kietiakiai.push_back(s);
+    //}
+ 
     Grupe.clear();
     auto endSplit = steady_clock::now();
     splitSec = duration_cast<duration<double>>(endSplit - startSplit).count();
 
     auto startVargs = steady_clock::now();
-    issaugotiRezultatus(vargsiukai, {});
+    //issaugotiRezultatus(vargsiukai, {});
+    issaugotiRezultatus(std::vector<Studentas>(vargsiukai.begin(), vargsiukai.end()), {});
     auto endVargs = steady_clock::now();
     vargsiukaiSec = duration_cast<duration<double>>(endVargs - startVargs).count();
 
     auto startKiet = steady_clock::now();
-    issaugotiRezultatus({}, kietiakiai);
+    //issaugotiRezultatus({}, kietiakiai);
+    issaugotiRezultatus({}, std::vector<Studentas>(kietiakiai.begin(), kietiakiai.end()));
     auto endKiet = steady_clock::now();
     kietiakiaiSec = duration_cast<duration<double>>(endKiet - startKiet).count();
 
