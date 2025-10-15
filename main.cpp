@@ -137,7 +137,12 @@ int main()
             cout << "Kiek studentu grupeje? ";
             cin >> m;
             for (int z = 0; z < m; z++)
-                Grupe.push_back(Stud_iv());
+            {
+                Studentas s = Stud_iv();
+                Grupe.push_back(s);
+                cout << "Studento " << s.var << " " << s.pav
+                     << " adresas konteineryje: " << &Grupe.back() << endl;
+            }
         }
         else if (pasirinkimas == 2)
         {
@@ -168,7 +173,8 @@ int main()
             while (true)
             {
                 Studentas s = Stud_file(fin);
-                if (!fin) break;
+                if (!fin)
+                    break;
                 Grupe.push_back(s);
             }
             auto end = steady_clock::now();
@@ -189,12 +195,11 @@ int main()
 
         auto startSort = steady_clock::now();
         Grupe.sort([rusiavimas](const Studentas &a, const Studentas &b)
-        {
+                   {
             if (rusiavimas == 1) return a.var < b.var;
             if (rusiavimas == 2) return a.pav < b.pav;
             if (rusiavimas == 3) return a.gal_vid < b.gal_vid;
-            return false;
-        });
+            return false; });
         auto endSort = steady_clock::now();
         sortSec = duration_cast<duration<double>>(endSort - startSort).count();
 
