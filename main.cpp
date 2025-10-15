@@ -1,7 +1,6 @@
 #include "studentas.h"
 #include "utils.h"
 #include "libraries.h"
-#include <list>
 
 int main()
 {
