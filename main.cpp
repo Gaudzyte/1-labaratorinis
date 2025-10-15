@@ -43,7 +43,12 @@ int main()
             cout << "Kiek studentu grupeje? ";
             cin >> m;
             for (int z = 0; z < m; z++)
-                Grupe.push_back(Stud_iv());
+            {
+                Studentas s = Stud_iv();
+                Grupe.push_back(s);
+                cout << "Studento " << s.var << " " << s.pav
+                     << " adresas konteineryje: " << &Grupe.back() << endl;
+            }
         }
         else if (pasirinkimas == 2)
         {
