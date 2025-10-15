@@ -15,16 +15,16 @@
 3. **"Nuskaityti studentus iš failo"**  
    - Programa nuskaito duomenis iš jau sugeneruotų failų
 
-#### Po duomenų nuskaitymo galima pasirinkti rūšiavimo kriterijų:####
+#### Po duomenų nuskaitymo galima pasirinkti rūšiavimo kriterijų: ####
 - pagal vardą;
 - pagal pavardę;
 - pagal galutinį pažymį (vidurkį).
 
-#### Studentai automatiškai suskirstomi į dvi grupes:####
+#### Studentai automatiškai suskirstomi į dvi grupes: ####
 - **vargšiukai** – galutinis pažymys < 5.0;
 - **kietiakai** – galutinis pažymys ≥ 5.0.
 
-#### Galiausiai programa matuoja ir išveda šių etapų vykdymo trukmę:####
+#### Galiausiai programa matuoja ir išveda šių etapų vykdymo trukmę: ####
 - įrašų nuskaitymo laiką,
 - rūšiavimo laiką,
 - dalijimo į dvi grupes laiką,
@@ -32,7 +32,7 @@
 - bendrą viso testo laiką.
 
 
-#### Testavimo sistemos parametrai:####
+#### Testavimo sistemos parametrai: ####
   - CPU - **AMD Ryzen 5 7520U with Radeon Graphics**
   - 2.80GHz
   - RAM - **16GB**
