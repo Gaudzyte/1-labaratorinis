@@ -39,3 +39,5 @@
   - SSD - **477GB**
 
 <img width="1066" height="622" alt="image" src="https://github.com/user-attachments/assets/8ccfbfa4-bffc-4d70-8765-031e53283a63" />
+
+Galime matyti jog duomenų nuskaitymo laikas yra labai panašus tarp vector ir list. Duomenų rūšiavimą list atlieka žymiai greičiau negu vector. Duomenų dalijimą į dvi grupes šįkart vector atlieka sparčiau. Nors paprastai duomenų įrašymą greičiau atlieka vector, šiuo atveju, esant 10 milijonų duomenų, list veikė greičiau – net 19 sekundžių skirtumu.
