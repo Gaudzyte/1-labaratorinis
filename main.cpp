@@ -217,12 +217,12 @@ int main()
         splitSec = duration_cast<duration<double>>(endSplit - startSplit).count();
 
         auto startVargs = steady_clock::now();
-        issaugotiRezultatus(vector<Studentas>(vargsiukai.begin(), vargsiukai.end()), {});
+        issaugotiRezultatus(vargsiukai, {});
         auto endVargs = steady_clock::now();
         vargsiukaiSec = duration_cast<duration<double>>(endVargs - startVargs).count();
 
         auto startKiet = steady_clock::now();
-        issaugotiRezultatus({}, vector<Studentas>(kietiakiai.begin(), kietiakiai.end()));
+        issaugotiRezultatus({}, kietiakiai);
         auto endKiet = steady_clock::now();
         kietiakiaiSec = duration_cast<duration<double>>(endKiet - startKiet).count();
     }
