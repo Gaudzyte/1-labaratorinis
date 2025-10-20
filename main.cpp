@@ -113,7 +113,7 @@ int main()
             else
                 kietiakiai.push_back(s);
         }
-        Grupe.clear();
+        //Grupe.clear();
         auto endSplit = steady_clock::now();
         splitSec = duration_cast<duration<double>>(endSplit - startSplit).count();
 
@@ -212,7 +212,7 @@ int main()
             else
                 kietiakiai.push_back(s);
         }
-        Grupe.clear();
+        //Grupe.clear();
         auto endSplit = steady_clock::now();
         splitSec = duration_cast<duration<double>>(endSplit - startSplit).count();
 
