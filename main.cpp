@@ -14,7 +14,7 @@ int main()
     cout << "Pasirinkimas: ";
     cin >> konteineris;
 
-    double readSec = 0.0, sortSec = 0.0, splitSec = 0.0, vargsiukaiSec = 0.0, kietiakiaiSec = 0.0;
+    double readSec = 0.0, sortSec = 0.0, splitSec = 0.0, saveSec = 0.0;
     size_t nIrasu = 0;
 
     int pasirinkimas;
@@ -105,27 +105,25 @@ int main()
         sortSec = duration_cast<duration<double>>(endSort - startSort).count();
 
         auto startSplit = steady_clock::now();
-        vector<Studentas> vargsiukai, kietiakiai;
-        for (auto &s : Grupe)
+        vector<Studentas> vargsiukai;
+
+        for (auto it = Grupe.begin(); it != Grupe.end();)
         {
-            if (s.gal_vid < 5.0)
-                vargsiukai.push_back(s);
+            if (it->gal_vid < 5.0)
+            {
+                vargsiukai.push_back(*it);
+                it = Grupe.erase(it); // ištrinam vargšiuką iš bendros grupės
+            }
             else
-                kietiakiai.push_back(s);
+                ++it;
         }
-        //Grupe.clear();
         auto endSplit = steady_clock::now();
         splitSec = duration_cast<duration<double>>(endSplit - startSplit).count();
 
-        auto startVargs = steady_clock::now();
-        issaugotiRezultatus(vargsiukai, {});
-        auto endVargs = steady_clock::now();
-        vargsiukaiSec = duration_cast<duration<double>>(endVargs - startVargs).count();
-
-        auto startKiet = steady_clock::now();
-        issaugotiRezultatus({}, kietiakiai);
-        auto endKiet = steady_clock::now();
-        kietiakiaiSec = duration_cast<duration<double>>(endKiet - startKiet).count();
+        auto startSave = steady_clock::now();
+        issaugotiRezultatus(vargsiukai, Grupe); 
+        auto endSave = steady_clock::now();
+        saveSec = duration_cast<duration<double>>(endSave - startSave).count();
     }
 
     else if (konteineris == 2)
@@ -204,27 +202,25 @@ int main()
         sortSec = duration_cast<duration<double>>(endSort - startSort).count();
 
         auto startSplit = steady_clock::now();
-        list<Studentas> vargsiukai, kietiakiai;
-        for (auto &s : Grupe)
+        list<Studentas> vargsiukai;
+
+        for (auto it = Grupe.begin(); it != Grupe.end();)
         {
-            if (s.gal_vid < 5.0)
-                vargsiukai.push_back(s);
+            if (it->gal_vid < 5.0)
+            {
+                vargsiukai.push_back(*it);
+                it = Grupe.erase(it); 
+            }
             else
-                kietiakiai.push_back(s);
+                ++it;
         }
-        //Grupe.clear();
         auto endSplit = steady_clock::now();
         splitSec = duration_cast<duration<double>>(endSplit - startSplit).count();
 
-        auto startVargs = steady_clock::now();
-        issaugotiRezultatus(vargsiukai, {});
-        auto endVargs = steady_clock::now();
-        vargsiukaiSec = duration_cast<duration<double>>(endVargs - startVargs).count();
-
-        auto startKiet = steady_clock::now();
-        issaugotiRezultatus({}, kietiakiai);
-        auto endKiet = steady_clock::now();
-        kietiakiaiSec = duration_cast<duration<double>>(endKiet - startKiet).count();
+        auto startSave = steady_clock::now();
+        issaugotiRezultatus(vargsiukai, Grupe);
+        auto endSave = steady_clock::now();
+        saveSec = duration_cast<duration<double>>(endSave - startSave).count();
     }
 
     auto programEnd = steady_clock::now();
@@ -235,8 +231,7 @@ int main()
          << " irasu nuskaitymo laikas: " << readSec << "\n"
          << nIrasu << " irasu rusiavimas didejimo tvarka laikas, su sort funkcija: " << sortSec << "\n"
          << nIrasu << " irasu dalijimo i dvi grupes laikas: " << splitSec << "\n"
-         << nIrasu << " irasu vargsiuku irasymo i faila laikas: " << vargsiukaiSec << "\n"
-         << nIrasu << " irasu keteku irasymo i faila laikas: " << kietiakiaiSec << "\n"
+         << nIrasu << " Issaugojimo i failus laikas: " << saveSec << "\n"
          << nIrasu << " irasu testo laikas: " << totalSec << endl;
 
     return 0;
