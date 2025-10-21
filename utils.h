@@ -1,3 +1,4 @@
+#define UTILS_H
 #include <list>
 #include <vector>
 #include <string>
@@ -15,13 +16,9 @@ using std::endl;
 using std::fixed;
 using std::setprecision;
 
-/*
-void issaugotiRezultatus(const std::vector<Studentas>& vargsiukai,
-                         const std::vector<Studentas>& kietiakiai);
-*/
+
 void rusiuoti(vector<Studentas>& grupe, int pasirinkimas);
 int extractNumber(const string& pav);
-//#endif
 
 template <typename T>
 void issaugotiRezultatus(const T &vargsiukai,
@@ -54,7 +51,7 @@ void issaugotiRezultatus(const T &vargsiukai,
           << setw(20) << "Galutinis (Med.)" << endl;
      out2 << string(80, '-') << endl;
 
-     for (auto &s : kietiakiai)
+     for ( const auto &s : kietiakiai)
      {
           out2 << left << setw(20) << s.pav
                << setw(15) << s.var
