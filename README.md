@@ -52,7 +52,17 @@ Galime matyti jog duomenų nuskaitymo laikas yra labai panašus tarp vector ir l
   - SSD - **477GB**
 
     ## **v1.0**
+Atliktos trys strategijos optimizuojant studentų rūšiavimą į dvi kategorijas:
+- 1 strategija: yra identiška, kaip veikdavo anksčiau.
+- 2 strategija: yra sukuriamas tik vienas papildomas konteineris - "Vargšiukai". Tie studentai, kurie neatitinka kriterijaus (vidurkis mažesnis už 5) yra ištrinami iš pagrindinio konteinerio.
+- 3 strategija: pritaikyti algoritmai (std::remove_if, std::remove_copy_if, std::stable_partition), jog būtų paspartintas skaidymas.
 
+Rezultatai sekundėmis:
 
 <img width="821" height="252" alt="image" src="https://github.com/user-attachments/assets/5f94ef9e-b3fe-417f-b720-fe56bafbd4bd" />
+
+**Išvados:**
+
+3 strategija vector konteineryeje greičiausiai atliko spartos analizę. Tačiau ir 1000 įrašų turinčio failo duomenys buvo greitai apdoroti, naudojant antrąją strategiją tiek su vector, tiek su list konteineriais.
+
 
