@@ -52,3 +52,7 @@ Galime matyti jog duomenų nuskaitymo laikas yra labai panašus tarp vector ir l
   - SSD - **477GB**
 
     ## **v1.0**
+
+
+<img width="821" height="252" alt="image" src="https://github.com/user-attachments/assets/5f94ef9e-b3fe-417f-b720-fe56bafbd4bd" />
+
