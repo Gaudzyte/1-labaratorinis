@@ -77,6 +77,26 @@ void Paskirstymas_vector_2_strategija(vector<Studentas> Grupe, const int irasu_s
          << t.elapsed() << " s\n";
 }
 
+void Paskirstymas_vector_3_strategija(vector<Studentas>& Grupe, const int irasu_sk) {
+    Timer t;
+    vector<Studentas> Vargsai;
+    Vargsai.reserve(Grupe.size());
+
+    std::remove_copy_if(Grupe.begin(), Grupe.end(), std::back_inserter(Vargsai),
+                        [](const Studentas& stud) {
+                            return stud.gal_vid >= 5;
+                        });
+
+    auto new_end = std::remove_if(Grupe.begin(), Grupe.end(),
+                                  [](const Studentas& stud) {
+                                      return stud.gal_vid < 5;
+                                  });
+    Grupe.erase(new_end, Grupe.end());
+
+    cout << irasu_sk << " irasu vektoriaus padalijimo 3 strategijos laikas: "
+         << t.elapsed() << " s\n";
+}
+
 void Paskirstymas_list_1_strategija(const list<Studentas> &Grupe, const int irasu_sk)
 {
     Timer t;
@@ -112,6 +132,25 @@ void Paskirstymas_list_2_strategija(list<Studentas> Grupe, const int irasu_sk)
          << t.elapsed() << " s\n";
 }
 
+void Paskirstymas_list_3_strategija(list<Studentas>& Grupe, const int irasu_sk) {
+    Timer t;
+    list<Studentas> Vargsai;
+
+    std::remove_copy_if(Grupe.begin(), Grupe.end(), std::back_inserter(Vargsai),
+                        [](const Studentas& stud) {
+                            return stud.gal_vid < 5;
+                        });
+
+    auto border = std::stable_partition(Grupe.begin(), Grupe.end(),
+                                        [](const Studentas& stud) {
+                                            return stud.gal_vid >= 5;
+                                        });
+    Grupe.erase(border, Grupe.end());
+
+    cout << irasu_sk << " irasu saraso padalijimo 3 strategijos laikas: "
+         << t.elapsed() << " s\n";
+}
+
 void TestavimasIsFailo(const string &failas, int irasu_sk)
 {
     cout << "\n"
@@ -126,6 +165,8 @@ void TestavimasIsFailo(const string &failas, int irasu_sk)
 
     Paskirstymas_vector_1_strategija(Grupe_vector, irasu_sk);
     Paskirstymas_vector_2_strategija(Grupe_vector, irasu_sk);
+    Paskirstymas_vector_3_strategija(Grupe_vector, irasu_sk);
     Paskirstymas_list_1_strategija(Grupe_list, irasu_sk);
     Paskirstymas_list_2_strategija(Grupe_list, irasu_sk);
+    Paskirstymas_list_3_strategija(Grupe_list, irasu_sk);
 }
