@@ -1,238 +1,28 @@
+#include <iostream>
+#include <vector>
+#include <list>
+#include <string>
+#include <chrono>
 #include "studentas.h"
-#include "utils.h"
-#include "libraries.h"
+#include "mylib.h"
+#include "timer.h"
 
+using namespace std;
 
-int main()
-{
-    using namespace std::chrono;
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
 
-    int konteineris;
-    cout << "Pasirinkite konteineri:\n";
-    cout << "1 - std::vector\n";
-    cout << "2 - std::list\n";
-    cout << "Pasirinkimas: ";
-    cin >> konteineris;
+    vector<pair<string, int>> failai = {
+        {"studentai.1000.txt", 1000},
+        {"studentai.10000.txt", 10000},
+        {"studentai.100000.txt", 100000},
+        {"studentai.1000000.txt", 1000000}
+        // {"studentai.10000000.txt", 10000000}
+    };
 
-    double readSec = 0.0, sortSec = 0.0, splitSec = 0.0, saveSec = 0.0;
-    size_t nIrasu = 0;
-
-    int pasirinkimas;
-    cout << "Pasirinkite veiksma:" << endl;
-    cout << "1 - Ivesti pazymius ranka" << endl;
-    cout << "2 - Generuoti atsitiktinius pazymius ir egzamina" << endl;
-    cout << "3 - Nuskaityti studentus is failo" << endl;
-    cout << "Pasirinkimas: ";
-    cin >> pasirinkimas;
-
-    while (pasirinkimas != 1 && pasirinkimas != 2 && pasirinkimas != 3)
-    {
-        cout << "Neteisingas pasirinkimas! Bandykite dar karta: ";
-        cin >> pasirinkimas;
-    }
-
-    steady_clock::time_point programStart;
-
-    if (konteineris == 1)
-    {
-        vector<Studentas> Grupe;
-
-        if (pasirinkimas == 1)
-        {
-            int m;
-            cout << "Kiek studentu grupeje? ";
-            cin >> m;
-            for (int z = 0; z < m; z++)
-            {
-                Studentas s = Stud_iv();
-                Grupe.push_back(s);
-                cout << "Studento " << s.var << " " << s.pav
-                     << " adresas konteineryje: " << &Grupe.back() << endl;
-            }
-        }
-        else if (pasirinkimas == 2)
-        {
-            int m;
-            cout << "Kiek studentu grupeje? ";
-            cin >> m;
-            auto start = steady_clock::now();
-            for (int z = 0; z < m; z++)
-                Grupe.push_back(Stud_rand());
-            auto end = steady_clock::now();
-            readSec = duration_cast<duration<double>>(end - start).count();
-            nIrasu = Grupe.size();
-        }
-        else if (pasirinkimas == 3)
-        {
-            string failoPav;
-            cout << "Iveskite failo pavadinima: ";
-            cin >> failoPav;
-            ifstream fin(failoPav);
-            if (!fin)
-            {
-                cout << "Nepavyko atidaryti failo " << failoPav << endl;
-                return 1;
-            }
-            string headerLine;
-            getline(fin, headerLine);
-            auto start = steady_clock::now();
-            while (true)
-            {
-                Studentas s = Stud_file(fin);
-                if (!fin)
-                    break;
-                Grupe.push_back(s);
-            }
-            auto end = steady_clock::now();
-            readSec = duration_cast<duration<double>>(end - start).count();
-            nIrasu = Grupe.size();
-            fin.close();
-        }
-
-        int rusiavimas;
-        cout << "Pagal ka norite rusiuoti?" << endl;
-        cout << "1 - Pagal varda" << endl;
-        cout << "2 - Pagal pavarde" << endl;
-        cout << "3 - Pagal galutini pazymi (vid.)" << endl;
-        cout << "Pasirinkimas: ";
-        cin >> rusiavimas;
-
-        programStart = steady_clock::now();
-
-        auto startSort = steady_clock::now();
-        rusiuoti(Grupe, rusiavimas);
-        auto endSort = steady_clock::now();
-        sortSec = duration_cast<duration<double>>(endSort - startSort).count();
-
-        auto startSplit = steady_clock::now();
-        vector<Studentas> vargsiukai;
-
-        for (auto it = Grupe.begin(); it != Grupe.end();)
-        {
-            if (it->gal_vid < 5.0)
-            {
-                vargsiukai.push_back(*it);
-                it = Grupe.erase(it); // ištrinam vargšiuką iš bendros grupės
-            }
-            else
-                ++it;
-        }
-        auto endSplit = steady_clock::now();
-        splitSec = duration_cast<duration<double>>(endSplit - startSplit).count();
-
-        auto startSave = steady_clock::now();
-        issaugotiRezultatus(vargsiukai, Grupe); 
-        auto endSave = steady_clock::now();
-        saveSec = duration_cast<duration<double>>(endSave - startSave).count();
-    }
-
-    else if (konteineris == 2)
-    {
-        list<Studentas> Grupe;
-        if (pasirinkimas == 1)
-        {
-            int m;
-            cout << "Kiek studentu grupeje? ";
-            cin >> m;
-            for (int z = 0; z < m; z++)
-            {
-                Studentas s = Stud_iv();
-                Grupe.push_back(s);
-                cout << "Studento " << s.var << " " << s.pav
-                     << " adresas konteineryje: " << &Grupe.back() << endl;
-            }
-        }
-        else if (pasirinkimas == 2)
-        {
-            int m;
-            cout << "Kiek studentu grupeje? ";
-            cin >> m;
-            auto start = steady_clock::now();
-            for (int z = 0; z < m; z++)
-                Grupe.push_back(Stud_rand());
-            auto end = steady_clock::now();
-            readSec = duration_cast<duration<double>>(end - start).count();
-            nIrasu = Grupe.size();
-        }
-        else if (pasirinkimas == 3)
-        {
-            string failoPav;
-            cout << "Iveskite failo pavadinima: ";
-            cin >> failoPav;
-            ifstream fin(failoPav);
-            if (!fin)
-            {
-                cout << "Nepavyko atidaryti failo " << failoPav << endl;
-                return 1;
-            }
-            string headerLine;
-            getline(fin, headerLine);
-            auto start = steady_clock::now();
-            while (true)
-            {
-                Studentas s = Stud_file(fin);
-                if (!fin)
-                    break;
-                Grupe.push_back(s);
-            }
-            auto end = steady_clock::now();
-            readSec = duration_cast<duration<double>>(end - start).count();
-            nIrasu = Grupe.size();
-            fin.close();
-        }
-
-        int rusiavimas;
-        cout << "Pagal ka norite rusiuoti?" << endl;
-        cout << "1 - Pagal varda" << endl;
-        cout << "2 - Pagal pavarde" << endl;
-        cout << "3 - Pagal galutini pazymi (vid.)" << endl;
-        cout << "Pasirinkimas: ";
-        cin >> rusiavimas;
-
-        programStart = steady_clock::now();
-
-        auto startSort = steady_clock::now();
-        Grupe.sort([rusiavimas](const Studentas &a, const Studentas &b)
-                   {
-            if (rusiavimas == 1) return a.var < b.var;
-            if (rusiavimas == 2) return a.pav < b.pav;
-            if (rusiavimas == 3) return a.gal_vid < b.gal_vid;
-            return false; });
-        auto endSort = steady_clock::now();
-        sortSec = duration_cast<duration<double>>(endSort - startSort).count();
-
-        auto startSplit = steady_clock::now();
-        list<Studentas> vargsiukai;
-
-        for (auto it = Grupe.begin(); it != Grupe.end();)
-        {
-            if (it->gal_vid < 5.0)
-            {
-                vargsiukai.push_back(*it);
-                it = Grupe.erase(it); 
-            }
-            else
-                ++it;
-        }
-        auto endSplit = steady_clock::now();
-        splitSec = duration_cast<duration<double>>(endSplit - startSplit).count();
-
-        auto startSave = steady_clock::now();
-        issaugotiRezultatus(vargsiukai, Grupe);
-        auto endSave = steady_clock::now();
-        saveSec = duration_cast<duration<double>>(endSave - startSave).count();
-    }
-
-    auto programEnd = steady_clock::now();
-    double totalSec = duration_cast<duration<double>>(programEnd - programStart).count();
-
-    cout << fixed << setprecision(6);
-    cout << "Failas uzdarytas\nFailo is " << nIrasu
-         << " irasu nuskaitymo laikas: " << readSec << "\n"
-         << nIrasu << " irasu rusiavimas didejimo tvarka laikas, su sort funkcija: " << sortSec << "\n"
-         << nIrasu << " irasu dalijimo i dvi grupes laikas: " << splitSec << "\n"
-         << nIrasu << " Issaugojimo i failus laikas: " << saveSec << "\n"
-         << nIrasu << " irasu testo laikas: " << totalSec << endl;
+    for (auto& f : failai)
+        TestavimasIsFailo(f.first, f.second);
 
     return 0;
 }
