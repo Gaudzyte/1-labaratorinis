@@ -17,12 +17,12 @@ int main() {
         {"studentai.1000.txt", 1000},
         {"studentai.10000.txt", 10000},
         {"studentai.100000.txt", 100000},
-        {"studentai.1000000.txt", 1000000}
-        // {"studentai.10000000.txt", 10000000}
+        {"studentai.1000000.txt", 1000000},
+        {"studentai.10000000.txt", 10000000}
     };
 
     for (auto& f : failai)
         TestavimasIsFailo(f.first, f.second);
-
     return 0;
 }
+
