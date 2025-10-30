@@ -66,3 +66,17 @@ Rezultatai sekundėmis:
 3 strategija vector konteineryeje greičiausiai atliko spartos analizę. Tačiau ir 1000 įrašų turinčio failo duomenys buvo greitai apdoroti, naudojant antrąją strategiją tiek su vector, tiek su list konteineriais.
 
 
+**Naudojimosi ir įdiegimo instrukcija:**
+
+1. Atsisiųskite failus main.cpp, mylib.cpp, laikas.h, mylib.h, studentas.h, Generuojami file ir CMakeLists.txt.
+2. Patikrinkite ar kompiuteryje turite įdiegtus C++ kompiliatorių ir projekto generavimo įrankius cmake. Jei jų neturite - įdiekite.
+3. Kompiuteryje sukurkite naują aplanką, kuriame vykdysite kodo paleidimą ir įkelkite CMakeLists.txt
+4. Šiame aplankale taip pat sukurkite aplanką "src" ir "include".
+5. Į "src" aplankalą sukelkite atsisiųstus .cpp failus ir sugeneruotus studentų failus (studentai.1000.txt, studentai.10000.txt ir t.t.), o į "include" .h failus.
+6. Atsidarykite komandinę eilutę ir nueikite iki jūsų sukurto failo, kuriame yra paruošti projekto failai. Tuomet komandinėje eilutėje įveskite:
+-  mkdir build
+-  cd build
+-  cmake [-DCMAKE_BUILD_TYPE=Release] ..
+-  cmake --build .
+7. Paleiskite programą įvedę V1_0.exe.
+8. Galiausiai matysite programos veikimo spartą skirtingoms strategijoms.
