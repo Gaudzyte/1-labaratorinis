@@ -13,6 +13,8 @@ int main() {
     ios::sync_with_stdio(false);
     cin.tie(nullptr);
 
+    cout << "Nuskaitomi failai\n" << flush;
+
     vector<pair<string, int>> failai = {
         {"studentai.1000.txt", 1000},
         {"studentai.10000.txt", 10000},
@@ -25,4 +27,3 @@ int main() {
         TestavimasIsFailo(f.first, f.second);
     return 0;
 }
-
