@@ -3,6 +3,10 @@
 #include <iostream>
 #include <algorithm>
 #include <chrono>
+#include <iomanip>    
+#include <sstream>     
+#include <string>       
+#include <fstream>
 using namespace std;
 
 vector<Studentas> NuskaitytiVector(const string &failas)
@@ -45,7 +49,7 @@ vector<Studentas> NuskaitytiVector(const string &failas)
     return studentai;
 }
 
-void Paskirstymas_vector_1_strategija(const vector<Studentas> &Grupe, const int irasu_sk)
+void Paskirstymas_vector_1_strategija(const vector<Studentas> &Grupe, const int irasu_sk, const string& failo_vardas)
 {
     Timer t;
     vector<Studentas> Vargsai, Kietiakai;
@@ -58,9 +62,12 @@ void Paskirstymas_vector_1_strategija(const vector<Studentas> &Grupe, const int 
     }
     cout << irasu_sk << " irasu vektoriaus padalijimo 1 strategijos laikas: "
          << t.elapsed() << " s\n";
+
+    Spausdinimas(Kietiakai, 1, failo_vardas);
+    Spausdinimas(Vargsai, 1, failo_vardas);
 }
 
-void Paskirstymas_vector_2_strategija(vector<Studentas> Grupe, const int irasu_sk)
+void Paskirstymas_vector_2_strategija(vector<Studentas> Grupe, const int irasu_sk, const string& failo_vardas)
 {
     Timer t;
     vector<Studentas> Vargsai;
@@ -75,9 +82,12 @@ void Paskirstymas_vector_2_strategija(vector<Studentas> Grupe, const int irasu_s
     Grupe.erase(Grupe.begin() + newSize, Grupe.end());
     cout << irasu_sk << " irasu vektoriaus padalijimo 2 strategijos laikas: "
          << t.elapsed() << " s\n";
+
+    Spausdinimas(Grupe, 2, failo_vardas);
+    Spausdinimas(Vargsai, 2, failo_vardas);
 }
 
-void Paskirstymas_vector_3_strategija(vector<Studentas>& Grupe, const int irasu_sk) {
+void Paskirstymas_vector_3_strategija(vector<Studentas>& Grupe, const int irasu_sk, const string& failo_vardas) {
     Timer t;
     vector<Studentas> Vargsai;
     Vargsai.reserve(Grupe.size());
@@ -95,9 +105,12 @@ void Paskirstymas_vector_3_strategija(vector<Studentas>& Grupe, const int irasu_
 
     cout << irasu_sk << " irasu vektoriaus padalijimo 3 strategijos laikas: "
          << t.elapsed() << " s\n";
+
+    Spausdinimas(Grupe, 3, failo_vardas);
+    Spausdinimas(Vargsai, 3, failo_vardas);
 }
 
-void Paskirstymas_list_1_strategija(const list<Studentas> &Grupe, const int irasu_sk)
+void Paskirstymas_list_1_strategija(const list<Studentas> &Grupe, const int irasu_sk, const string& failo_vardas)
 {
     Timer t;
     list<Studentas> Vargsai, Kietiakai;
@@ -110,9 +123,12 @@ void Paskirstymas_list_1_strategija(const list<Studentas> &Grupe, const int iras
     }
     cout << irasu_sk << " irasu saraso padalijimo 1 strategijos laikas: "
          << t.elapsed() << " s\n";
+
+    Spausdinimas(Kietiakai, 1, failo_vardas);
+    Spausdinimas(Vargsai, 1, failo_vardas);
 }
 
-void Paskirstymas_list_2_strategija(list<Studentas> Grupe, const int irasu_sk)
+void Paskirstymas_list_2_strategija(list<Studentas> Grupe, const int irasu_sk, const string& failo_vardas)
 {
     Timer t;
     list<Studentas> Vargsai;
@@ -130,25 +146,29 @@ void Paskirstymas_list_2_strategija(list<Studentas> Grupe, const int irasu_sk)
     }
     cout << irasu_sk << " irasu saraso padalijimo 2 strategijos laikas: "
          << t.elapsed() << " s\n";
+
+    Spausdinimas(Grupe, 2, failo_vardas);
+    Spausdinimas(Vargsai, 2, failo_vardas);
 }
 
-void Paskirstymas_list_3_strategija(list<Studentas>& Grupe, const int irasu_sk) {
+void Paskirstymas_list_3_strategija(list<Studentas>& Grupe, const int irasu_sk, const string& failo_vardas) {
     Timer t;
     list<Studentas> Vargsai;
 
     std::remove_copy_if(Grupe.begin(), Grupe.end(), std::back_inserter(Vargsai),
                         [](const Studentas& stud) {
-                            return stud.gal_vid < 5;
+                            return stud.gal_vid >= 5;
                         });
 
-    auto border = std::stable_partition(Grupe.begin(), Grupe.end(),
-                                        [](const Studentas& stud) {
-                                            return stud.gal_vid >= 5;
-                                        });
-    Grupe.erase(border, Grupe.end());
+    Grupe.remove_if([](const Studentas& stud) {
+        return stud.gal_vid < 5;
+    });
 
     cout << irasu_sk << " irasu saraso padalijimo 3 strategijos laikas: "
          << t.elapsed() << " s\n";
+
+    Spausdinimas(Grupe, 3, failo_vardas);
+    Spausdinimas(Vargsai, 3, failo_vardas);
 }
 
 void TestavimasIsFailo(const string &failas, int irasu_sk)
@@ -163,10 +183,37 @@ void TestavimasIsFailo(const string &failas, int irasu_sk)
 
     cout << "Failo nuskaitymas uztruko: " << readTime << " s\n";
 
-    Paskirstymas_vector_1_strategija(Grupe_vector, irasu_sk);
-    Paskirstymas_vector_2_strategija(Grupe_vector, irasu_sk);
-    Paskirstymas_vector_3_strategija(Grupe_vector, irasu_sk);
-    Paskirstymas_list_1_strategija(Grupe_list, irasu_sk);
-    Paskirstymas_list_2_strategija(Grupe_list, irasu_sk);
-    Paskirstymas_list_3_strategija(Grupe_list, irasu_sk);
+    Paskirstymas_vector_1_strategija(Grupe_vector, irasu_sk, failas);
+    Paskirstymas_vector_2_strategija(Grupe_vector, irasu_sk, failas);
+    Paskirstymas_vector_3_strategija(Grupe_vector, irasu_sk, failas);
+    Paskirstymas_list_1_strategija(Grupe_list, irasu_sk, failas);
+    Paskirstymas_list_2_strategija(Grupe_list, irasu_sk, failas);
+    Paskirstymas_list_3_strategija(Grupe_list, irasu_sk, failas);
+}
+
+template <typename T>
+void Spausdinimas(const T &Spausd_gr, const int& strat, const std::string& failo_vardas) {
+    if (Spausd_gr.empty()) return;
+
+    std::stringstream ss;
+    ss << std::setw(15) << std::left << "Vardas"
+       << std::setw(20) << std::left << "Pavarde"
+       << std::setw(17) << std::left << "Galutinis (Vid.)" << std::endl;
+    ss << std::string(52, '-') << std::endl;
+
+    for (const auto &Past : Spausd_gr) {
+        ss << std::setw(15) << std::left << Past.var
+           << std::setw(20) << std::left << Past.pav
+           << std::setw(17) << std::left << std::fixed
+           << std::setprecision(2) << Past.gal_vid << std::endl;
+    }
+
+    auto it = Spausd_gr.begin();
+    std::string tipas = (it->gal_vid >= 5) ? "_kietiakai" : "_vargsiukai";
+    std::string failoPav = failo_vardas.substr(0, failo_vardas.find_last_of('.')) +
+                           tipas + std::to_string(strat) + ".txt";
+
+    std::ofstream out(failoPav);
+    out << ss.str();
+    out.close();
 }
